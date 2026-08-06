@@ -2,7 +2,7 @@ name: CD Manifest Validation
 
 # k8s/overlays/dev를 Kustomize로 렌더링해 YAML 구조가 정상인지 확인하고, 
 # Git 저장소에 DB 비밀번호가 포함됐는지를 검사
-# 실제 배포는 Argo CD가 담당
+# 실제 배포는 Argo CD가 담당 체크
 on:
   pull_request:
     branches: [main]

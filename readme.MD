@@ -169,3 +169,13 @@ tf-k8s-cd/
   ---
   오류 없이 잘 출력 OK
 ```
+
+```
+  # kustomization.yaml git 비교 (추후 다시 확인)
+  git diff -- k8s/overlays/dev/kustomization.yaml
+```
+
+```
+  # github actions 잘 작동되는지 점검
+  validate.yml = 주석 `체크` 문구 추가
+```
