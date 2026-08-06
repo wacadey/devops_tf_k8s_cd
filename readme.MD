@@ -178,4 +178,6 @@ tf-k8s-cd/
 ```
   # github actions 잘 작동되는지 점검
   validate.yml = 주석 `체크` 문구 추가
+  ---
+  스테이징 -> 커밋 -> 푸시 -> git actions 작동 -> 그린라이트 (확인)
 ```
