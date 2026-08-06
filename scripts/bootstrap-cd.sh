@@ -9,7 +9,7 @@ fi
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CD_REPOSITORY="${1%.git}"
 CD_REPOSITORY="${CD_REPOSITORY//\\//}"
-CI_INFRA_DIR="${2:-${CI_INFRA_DIR:-${ROOT_DIR}/../tf-k8s-ci/infra}}"
+CI_INFRA_DIR="${2:-${CI_INFRA_DIR:-${ROOT_DIR}/../devops_tf_k8s_ci/infra}}"
 CD_REPO_URL="https://github.com/${CD_REPOSITORY}.git"
 INITIAL_IMAGE_TAG="${INITIAL_IMAGE_TAG:-dev-latest}"
 APP_NAMESPACE="${APP_NAMESPACE:-de-ai-12}"

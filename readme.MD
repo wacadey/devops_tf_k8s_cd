@@ -1,3 +1,5 @@
+[한국어 원문](./readme.MD) | [中文翻译](./README.zh-CN.md)
+
 # 목표
 - CD 구성
 - EKS (Auto Mode) 환경의 WEB/WAS 애플리케이션을 ArgoCD로 배포하는 `GitOps CD 저장소`
@@ -196,5 +198,86 @@ tf-k8s-cd/
       |+-----------------------------------+|
 
     # 연결 (클러스터명 교체)
-    aws eks update-kubeconfig --region us-east-1 --name de-ai-12-devops-tf-eks-auto-dev 
+    aws eks update-kubeconfig --region us-east-1 --name de-ai-12-devops-tf-eks-auto-dev
+    ---
+    Updated context arn:aws:eks:ap-northeast-2:827913617635:cluster/de-ai-25-devops-tf-eks-auto-dev in C:\Users\Dell3571\.kube\config
+
+    # kubectl이 실제 접근 가능한 클러스터 목록(가능한지)
+    kubectl get namespaces
+    ---
+    NAME              STATUS   AGE
+    de-ai-25          Active   177m
+    default           Active   3h17m
+    kube-node-lease   Active   3h17m
+    kube-public       Active   3h17m
+    kube-system       Active   3h17m
   ```
+
+- Argo CD 설치
+```
+  # 설치
+  .\scripts\bootstrap-cd.bat ucoccto/devops_tf_k8s_cd
+
+  # Argo CD 상태 확인 - Argo CD 파트 확인
+  # 쿠버네티스 클러스터에 CD 업무를 위해 pod 형태로 설치 운영됨
+  kubectl get pods -n argocd
+  ---
+  NAME                                               READY   STATUS    RESTARTS   AGE
+  argocd-application-controller-0                    1/1     Running   0          4m21s
+  argocd-applicationset-controller-8d6865b7f-49npf   1/1     Running   0          4m21s
+  argocd-dex-server-74bbf47cf6-8dszm                 1/1     Running   0          4m21s
+  argocd-notifications-controller-84798f79-42zc9     1/1     Running   0          4m21s
+  argocd-redis-79db4b8976-29pbz                      1/1     Running   0          4m21s
+  argocd-repo-server-5fcf7766cd-khvsz                1/1     Running   0          4m21s
+  argocd-server-978b68fb7-q67sc                      1/1     Running   0          4m21s
+
+  # Argo CD와 Github 저장소 연결 상태 확인
+  kubectl get applications -n argocd
+  ---
+  NAME       SYNC STATUS   HEALTH STATUS
+  de-ai-25   OutOfSync     Healthy <- unknown 이면 인증등 절차 추가됨(일단 public으로 진행)
+  ---
+  private인 경우 절차 추가로 문서로 제공
+```
+
+- 현재 상황 체크 
+```
+  # pod 상태 확인
+  kubectl get pods -n de-ai-25
+  ---
+  NAME                  READY   STATUS    RESTARTS   AGE
+  was-5d6bfcfcf-4ljtq   1/1     Running   0          10m
+  was-5d6bfcfcf-6prwq   1/1     Running   0          10m
+  web-575f6f465-llnnz   1/1     Running   0          10m
+  web-575f6f465-nn4dg   1/1     Running   0          10m
+
+  # Ingress, ALB 주소 체크
+  kubectl get ingress -n de-ai-25
+  ---
+  NAME         CLASS   HOSTS   ADDRESS   PORTS   AGE
+public-alb   alb     *    k8s-deai25-publical-aa59f987ef-214105444.ap-northeast-2.elb.amazonaws.com   80      11m
+
+  # 현재 클러스터에 배포된 이미지 확인
+  kubectl get deployment web was  -n de-ai-25  -o jsonpath="{range .items[*]}{.metadata.name}{': '}{.spec.template.spec.containers[0].image}{'\n'}{end}"
+  ---
+  web: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-devops-tf-eks-auto-dev/web:dev-latest
+  was: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-devops-tf-eks-auto-dev/was:dev-latest
+  --- 현재 태그명 dev-latest으로 배포되어 있다!!
+```
+
+- CI 저장소 ci.yaml jobs중 `update-cd:` 이하 주석 해제
+  - 아래 2개 변수를 설정
+    - CD_REPOSITORY
+      ```
+        gh variable set CD_REPOSITORY --repo ucoccto/devops_tf_k8s_ci --body "ucoccto/devops_tf_k8s_cd"
+        ---
+        ucoccto/devops_tf_k8s_ci --body "ucoccto/devops_tf_k8s_cd"
+        ✓ Created variable CD_REPOSITORY for ucoccto/devops_tf_k8s_ci
+      ```
+    - CD_REPOSITORY_TOKEN
+      ```
+        gh auth token | gh secret set CD_REPOSITORY_TOKEN --repo ucoccto/devops_tf_k8s_ci
+        ---
+        SITORY_TOKEN --repo ucoccto/devops_tf_k8s_ci
+        ✓ Set Actions secret CD_REPOSITORY_TOKEN for ucoccto/devops_tf_k8s_ci
+      ```
