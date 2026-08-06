@@ -145,23 +145,23 @@ tf-k8s-cd/
   ```
 
 - 점검
-```
-  # 태그 확인 - `dev-latest, 해시값 확인`
-  # --repository-name 뒷값 본인것으로 수정후 테스트함
-  aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/web"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
-  ---
-  [                                                                                                          
-    "dev-latest",
-    "00608b179588"
-  ] 
-  
-  aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/was"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
-  ---
-  [                                                                                                          
-    "d8b623986184",
-    "dev-latest"
-  ]
-```
+  ```
+    # 태그 확인 - `dev-latest, 해시값 확인`
+    # --repository-name 뒷값 본인것으로 수정후 테스트함
+    aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/web"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+    ---
+    [                                                                                                          
+      "dev-latest",
+      "d8b623986184"
+    ] 
+    
+    aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/was"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+    ---
+    [                                                                                                          
+      "d8b623986184",
+      "dev-latest"
+    ]
+  ```
 
 ```
   # kustomization.yaml 점검
@@ -170,14 +170,21 @@ tf-k8s-cd/
   오류 없이 잘 출력 OK
 ```
 
-```
-  # kustomization.yaml git 비교 (추후 다시 확인)
-  git diff -- k8s/overlays/dev/kustomization.yaml
-```
+  ```
+    # kustomization.yaml git 비교 (추후 다시 확인)
+    git diff -- k8s/overlays/dev/kustomization.yaml
+  ```
 
-```
-  # github actions 잘 작동되는지 점검
-  validate.yml = 주석 `체크` 문구 추가
-  ---
-  스테이징 -> 커밋 -> 푸시 -> git actions 작동 -> 그린라이트 (확인)
-```
+  ```
+    # github actions 잘 작동되는지 점검
+    validate.yml = 주석 `체크` 문구 추가
+    ---
+    스테이징 -> 커밋 -> 푸시 -> git actions 작동 -> 그린라이트 (확인)
+  ```
+
+- 로컬 PC의 kubectl과 EKS 클러스터 연결
+  ```
+    # EKS 클러스터명 조회 (리전 수정)
+    aws eks list-clusters  --region us-east-1 --output table
+
+  ```
