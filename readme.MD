@@ -99,3 +99,73 @@ tf-k8s-cd/
    ├─ setup-ci-cd-link.sh
    └─ update_images.py             : .tpl 형식으로 작성된 Argo CD 템플릿을 실제 YAML 파일로 변환
 ```
+
+# Argo CD 폴더 
+- Argo CD가 어떤 방식으로 쿠버네티스 리소스를 배포할지 정의
+- .tpl 파일 형식은 실제값이 들어가서 세팅되어야 함 -> 템플릿 파일
+- 세부
+  - CD
+    - argocd/application.yaml.tpl
+      - 애플리케이션 리소스 정의, 쿠버네티스 배포 위치 지정, 실제 감시할 위치 지정
+      - 실제 배포 작업 정의
+    - argocd/project.yaml.tpl
+      - 애플리케이션 논리적 구분, 배포 권한 제한 선언, ecr정보등 참조
+  - 모니터링
+    - argocd/monitoring-application.yaml.tpl
+      - 프로메테우스, 그라파나등 모니터링관련 설정, CD와 관계 x
+
+# 세팅
+- 구분값 교체
+  - de-ai-25 => de-ai-xx
+  - DE-AI-25 => DE-AI-xx
+
+- ~\k8s\overlays\dev\kustomization.yaml 1회성 수기 수정
+  - newName 파트 수정 : 본인 ECR내 web/was 이미지 주소로 변경
+  ```
+    # 본인 리전 교체
+    aws ecr describe-repositories --region ap-northeast-2  --query "repositories[].{Name:repositoryName,URI:repositoryUri}"  --output table
+    ---
+    ---------------------------------------------------------------------------------------------------------------------------------- 
+    |                                                      DescribeRepositories                                                      |
+    +--------------------------------------+-----------------------------------------------------------------------------------------+
+    |                 Name                 |                                           URI                                           |
+    +--------------------------------------+-----------------------------------------------------------------------------------------+
+    |  de-ai-12-devops-tf-eks-auto-dev/web |  827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/web       |
+    |  de-ai-12-devops-tf-eks-auto-dev/was |  827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/was       |
+    +--------------------------------------+-----------------------------------------------------------------------------------------+
+
+    # kustomization.yaml 수정
+    images:
+    - name: WAS_IMAGE
+      newName: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/was <- 수정
+      newTag: 5f68fff31524
+    - name: WEB_IMAGE
+      newName: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/web <- 수정
+      newTag: 5f68fff31524
+  ```
+
+- 점검
+```
+  # 태그 확인 - `dev-latest, 해시값 확인`
+  # --repository-name 뒷값 본인것으로 수정후 테스트함
+  aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/web"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+  ---
+  [                                                                                                          
+    "dev-latest",
+    "00608b179588"
+  ] 
+  
+  aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/was"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+  ---
+  [                                                                                                          
+    "d8b623986184",
+    "dev-latest"
+  ]
+```
+
+```
+  # kustomization.yaml 점검
+  kubectl kustomize k8s/overlays/dev
+  ---
+  오류 없이 잘 출력 OK
+```
