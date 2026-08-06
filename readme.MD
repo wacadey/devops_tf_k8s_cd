@@ -186,5 +186,15 @@ tf-k8s-cd/
   ```
     # EKS 클러스터명 조회 (리전 수정)
     aws eks list-clusters  --region us-east-1 --output table
+    ---
+      ---------------------------------------
+      |            ListClusters             |
+      +-------------------------------------+
+      ||             clusters              ||
+      |+-----------------------------------+|
+      ||  de-ai-25-devops-tf-eks-auto-dev  ||
+      |+-----------------------------------+|
 
+    # 연결 (클러스터명 교체)
+    aws eks update-kubeconfig --region us-east-1 --name de-ai-12-devops-tf-eks-auto-dev 
   ```
