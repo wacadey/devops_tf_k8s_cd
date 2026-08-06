@@ -267,8 +267,8 @@ jobs:
             "WEB_IMAGE=${WEB_IMAGE}:${IMAGE_TAG}" \
             "WAS_IMAGE=${WAS_IMAGE}:${IMAGE_TAG}"
 
-          kustomize build . > /tmp/de-ai-25.yaml
-          test -s /tmp/de-ai-25.yaml
+          kustomize build . > /tmp/de-ai-12.yaml
+          test -s /tmp/de-ai-12.yaml
 
       - name: Commit and push CD change
         working-directory: tf-k8s-cd

@@ -51,5 +51,5 @@ if errorlevel 1 (
 
 echo [OK] Argo CD monitoring Application 등록 완료
 echo      생성 파일: %OUTPUT_FILE%
-echo      확인 명령: kubectl get application -n argocd de-ai-25-monitoring
+echo      확인 명령: kubectl get application -n argocd de-ai-12-monitoring
 exit /b 0

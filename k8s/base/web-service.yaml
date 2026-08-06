@@ -4,7 +4,7 @@ metadata:
   name: web-service
   labels:
     app.kubernetes.io/name: web
-    app.kubernetes.io/part-of: de-ai-25
+    app.kubernetes.io/part-of: de-ai-12
 spec:
   type: NodePort
 

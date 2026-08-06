@@ -5,17 +5,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   # Grafana/Prometheus에서 식별할 ServiceMonitor 이름이다.
-  name: de-ai-25-was
+  name: de-ai-12-was
   # ServiceMonitor 자체는 monitoring namespace에 둔다.
   namespace: monitoring
   labels:
     # 운영 목적을 설명하는 사용자 라벨이다.
-    app.kubernetes.io/part-of: de-ai-25
+    app.kubernetes.io/part-of: de-ai-12
 spec:
-  # de-ai-25 namespace 안에서 수집 대상 Service를 찾는다.
+  # de-ai-12 namespace 안에서 수집 대상 Service를 찾는다.
   namespaceSelector:
     matchNames:
-      - de-ai-25
+      - de-ai-12
 
   # 아래 라벨을 가진 Service를 수집 대상으로 선택한다.
   # 기존 service-was.yaml의 metadata.labels에 app: was가 있어야 한다.

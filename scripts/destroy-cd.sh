@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-kubectl delete application de-ai-25 \
+kubectl delete application de-ai-12 \
   -n argocd \
   --ignore-not-found \
   --wait=true \
   --timeout=15m
 
-kubectl delete appproject de-ai-25 \
+kubectl delete appproject de-ai-12 \
   -n argocd \
   --ignore-not-found
 

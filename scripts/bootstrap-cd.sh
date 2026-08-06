@@ -12,7 +12,7 @@ CD_REPOSITORY="${CD_REPOSITORY//\\//}"
 CI_INFRA_DIR="${2:-${CI_INFRA_DIR:-${ROOT_DIR}/../tf-k8s-ci/infra}}"
 CD_REPO_URL="https://github.com/${CD_REPOSITORY}.git"
 INITIAL_IMAGE_TAG="${INITIAL_IMAGE_TAG:-dev-latest}"
-APP_NAMESPACE="${APP_NAMESPACE:-de-ai-25}"
+APP_NAMESPACE="${APP_NAMESPACE:-de-ai-12}"
 AUTO_PUSH="${AUTO_PUSH:-true}"
 
 for command_name in git terraform aws kubectl python3; do

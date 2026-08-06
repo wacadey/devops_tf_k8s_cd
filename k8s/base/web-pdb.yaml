@@ -4,7 +4,7 @@ metadata:
   name: web
   labels:
     app.kubernetes.io/name: web
-    app.kubernetes.io/part-of: de-ai-25
+    app.kubernetes.io/part-of: de-ai-12
 spec:
   minAvailable: 1
   selector:

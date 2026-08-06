@@ -16,10 +16,10 @@ if "%~1"=="" (
 )
 
 for %%I in ("%CI_INFRA_DIR%") do set "CI_INFRA_DIR=%%~fI"
-if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-25"
+if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-12"
 
-set "SECRET_JSON_FILE=%TEMP%\de-ai-25-rds-%RANDOM%.json"
-set "DB_ENV_FILE=%TEMP%\de-ai-25-rds-%RANDOM%.env"
+set "SECRET_JSON_FILE=%TEMP%\de-ai-12-rds-%RANDOM%.json"
+set "DB_ENV_FILE=%TEMP%\de-ai-12-rds-%RANDOM%.env"
 
 call :terraform_output AWS_REGION aws_region
 if errorlevel 1 goto :error
@@ -64,7 +64,7 @@ if errorlevel 1 goto :error
 
 kubectl label secret rds-secret ^
   --namespace "%APP_NAMESPACE%" ^
-  app.kubernetes.io/part-of=de-ai-25 ^
+  app.kubernetes.io/part-of=de-ai-12 ^
   --overwrite
 if errorlevel 1 goto :error
 

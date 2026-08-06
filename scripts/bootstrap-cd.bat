@@ -28,7 +28,7 @@ for %%I in ("%CI_INFRA_DIR%") do set "CI_INFRA_DIR=%%~fI"
 
 set "CD_REPO_URL=https://github.com/%CD_REPOSITORY%.git"
 if not defined INITIAL_IMAGE_TAG set "INITIAL_IMAGE_TAG=dev-latest"
-if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-25"
+if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-12"
 if not defined AUTO_PUSH set "AUTO_PUSH=true"
 
 call "%ROOT_DIR%\scripts\configure-manifests.bat" "%CI_INFRA_DIR%" "%INITIAL_IMAGE_TAG%"

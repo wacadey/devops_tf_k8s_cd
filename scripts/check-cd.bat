@@ -2,12 +2,12 @@
 setlocal EnableExtensions DisableDelayedExpansion
 chcp 65001 >nul
 
-if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-25"
+if not defined APP_NAMESPACE set "APP_NAMESPACE=de-ai-12"
 
 echo ============================================================
 echo Argo CD Application
 echo ============================================================
-kubectl get application de-ai-25 -n argocd -o wide
+kubectl get application de-ai-12 -n argocd -o wide
 
 echo.
 echo ============================================================

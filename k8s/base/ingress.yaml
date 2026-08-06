@@ -5,7 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
   labels:
-    app.kubernetes.io/part-of: de-ai-25
+    app.kubernetes.io/part-of: de-ai-12
 spec:
   ingressClassName: alb
 

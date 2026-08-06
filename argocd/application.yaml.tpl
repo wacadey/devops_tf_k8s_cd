@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: de-ai-25
+  name: de-ai-12
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: de-ai-25
+  project: de-ai-12
 
   source:
     repoURL: "__CD_REPO_URL__"
@@ -15,7 +15,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: de-ai-25
+    namespace: de-ai-12
 
   syncPolicy:
     automated:

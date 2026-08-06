@@ -4,7 +4,7 @@ metadata:
   name: was
   labels:
     app.kubernetes.io/name: was
-    app.kubernetes.io/part-of: de-ai-25
+    app.kubernetes.io/part-of: de-ai-12
     app.kubernetes.io/component: backend
 spec:
   replicas: 2
@@ -23,7 +23,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: was
-        app.kubernetes.io/part-of: de-ai-25
+        app.kubernetes.io/part-of: de-ai-12
         app.kubernetes.io/component: backend
     spec:
       terminationGracePeriodSeconds: 30

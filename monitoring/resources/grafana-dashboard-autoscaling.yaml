@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: de-ai-25-autoscaling-dashboard
+  name: de-ai-12-autoscaling-dashboard
   namespace: monitoring
   labels:
     # values.yaml의 Grafana sidecar 검색 조건과 일치해야 한다.
     grafana_dashboard: "1"
 data:
   # 아래 JSON은 Grafana Dashboard 정의이며 YAML 블록 문자열로 저장한다.
-  de-ai-25-autoscaling.json: |-
+  de-ai-12-autoscaling.json: |-
     {
       "annotations": {"list": []},
       "editable": true,
@@ -21,7 +21,7 @@ data:
           "title": "현재 실행 중인 Pod",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "sum(kube_pod_status_phase{namespace=\"de-ai-25\",phase=\"Running\"})", "refId": "A"}
+            {"expr": "sum(kube_pod_status_phase{namespace=\"de-ai-12\",phase=\"Running\"})", "refId": "A"}
           ],
           "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0}
         },
@@ -39,7 +39,7 @@ data:
           "title": "Pending Pod 수",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "sum(kube_pod_status_phase{namespace=\"de-ai-25\",phase=\"Pending\"})", "refId": "A"}
+            {"expr": "sum(kube_pod_status_phase{namespace=\"de-ai-12\",phase=\"Pending\"})", "refId": "A"}
           ],
           "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0}
         },
@@ -48,7 +48,7 @@ data:
           "title": "최근 10분 Container 재시작",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"de-ai-25\"}[10m]))", "refId": "A"}
+            {"expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"de-ai-12\"}[10m]))", "refId": "A"}
           ],
           "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0}
         },
@@ -57,9 +57,9 @@ data:
           "title": "HPA 현재 / 목표 / 최대 Replica",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "kube_horizontalpodautoscaler_status_current_replicas{namespace=\"de-ai-25\"}", "legendFormat": "{{horizontalpodautoscaler}} current", "refId": "A"},
-            {"expr": "kube_horizontalpodautoscaler_status_desired_replicas{namespace=\"de-ai-25\"}", "legendFormat": "{{horizontalpodautoscaler}} desired", "refId": "B"},
-            {"expr": "kube_horizontalpodautoscaler_spec_max_replicas{namespace=\"de-ai-25\"}", "legendFormat": "{{horizontalpodautoscaler}} max", "refId": "C"}
+            {"expr": "kube_horizontalpodautoscaler_status_current_replicas{namespace=\"de-ai-12\"}", "legendFormat": "{{horizontalpodautoscaler}} current", "refId": "A"},
+            {"expr": "kube_horizontalpodautoscaler_status_desired_replicas{namespace=\"de-ai-12\"}", "legendFormat": "{{horizontalpodautoscaler}} desired", "refId": "B"},
+            {"expr": "kube_horizontalpodautoscaler_spec_max_replicas{namespace=\"de-ai-12\"}", "legendFormat": "{{horizontalpodautoscaler}} max", "refId": "C"}
           ],
           "gridPos": {"h": 9, "w": 12, "x": 0, "y": 6}
         },
@@ -68,7 +68,7 @@ data:
           "title": "Deployment 사용 가능 Replica",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "kube_deployment_status_replicas_available{namespace=\"de-ai-25\"}", "legendFormat": "{{deployment}}", "refId": "A"}
+            {"expr": "kube_deployment_status_replicas_available{namespace=\"de-ai-12\"}", "legendFormat": "{{deployment}}", "refId": "A"}
           ],
           "gridPos": {"h": 9, "w": 12, "x": 12, "y": 6}
         },
@@ -77,7 +77,7 @@ data:
           "title": "Namespace CPU 사용량",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"de-ai-25\",container!=\"\",image!=\"\"}[5m]))", "legendFormat": "CPU cores", "refId": "A"}
+            {"expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"de-ai-12\",container!=\"\",image!=\"\"}[5m]))", "legendFormat": "CPU cores", "refId": "A"}
           ],
           "gridPos": {"h": 9, "w": 12, "x": 0, "y": 15}
         },
@@ -86,7 +86,7 @@ data:
           "title": "Namespace Memory Working Set",
           "datasource": {"type": "prometheus", "uid": "${datasource}"},
           "targets": [
-            {"expr": "sum(container_memory_working_set_bytes{namespace=\"de-ai-25\",container!=\"\",image!=\"\"})", "legendFormat": "Memory", "refId": "A"}
+            {"expr": "sum(container_memory_working_set_bytes{namespace=\"de-ai-12\",container!=\"\",image!=\"\"})", "legendFormat": "Memory", "refId": "A"}
           ],
           "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
           "gridPos": {"h": 9, "w": 12, "x": 12, "y": 15}
@@ -114,7 +114,7 @@ data:
       ],
       "refresh": "10s",
       "schemaVersion": 39,
-      "tags": ["de-ai-25", "kubernetes", "autoscaling"],
+      "tags": ["de-ai-12", "kubernetes", "autoscaling"],
       "templating": {
         "list": [
           {
@@ -127,7 +127,7 @@ data:
       },
       "time": {"from": "now-30m", "to": "now"},
       "timezone": "browser",
-      "title": "DE-AI-25 Kubernetes Autoscaling",
-      "uid": "de-ai-25-autoscaling",
+      "title": "DE-AI-12 Kubernetes Autoscaling",
+      "uid": "de-ai-12-autoscaling",
       "version": 1
     }

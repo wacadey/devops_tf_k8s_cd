@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: de-ai-25
+namespace: de-ai-12
 
 resources:
 - ../../base
@@ -11,8 +11,8 @@ commonLabels:
 
 images:
 - name: WAS_IMAGE
-  newName: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-eks-auto-dev/was
+  newName: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/was
   newTag: 5f68fff31524
 - name: WEB_IMAGE
-  newName: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-eks-auto-dev/web
+  newName: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/web
   newTag: 5f68fff31524

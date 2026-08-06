@@ -4,7 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   # Argo CD 화면에 표시될 모니터링 Application 이름이다.
-  name: de-ai-25-monitoring
+  name: de-ai-12-monitoring
   # Application 리소스는 Argo CD가 설치된 namespace에 생성한다.
   namespace: argocd
   # Application 삭제 시 Argo CD가 생성한 하위 리소스도 정리하도록 finalizer를 지정한다.
