@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-service
+  name: web
   labels:
     app.kubernetes.io/name: web
     app.kubernetes.io/part-of: de-ai-12
