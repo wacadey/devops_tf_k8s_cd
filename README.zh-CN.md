@@ -98,7 +98,7 @@ tf-k8s-cd/
 
 ## 替换标识值
 
-- `de-ai-25` → `de-ai-xx`
+- `de-ai-12` → `de-ai-xx`
 - `DE-AI-25` → `DE-AI-xx`
 
 ## 首次修改 `k8s/overlays/dev/kustomization.yaml`
@@ -106,7 +106,7 @@ tf-k8s-cd/
 查询本人 ECR 中的 WEB/WAS 镜像地址：
 
 ```bash
-aws ecr describe-repositories --region ap-northeast-2 --query "repositories[].{Name:repositoryName,URI:repositoryUri}" --output table
+aws ecr describe-repositories --region us-east-1 --query "repositories[].{Name:repositoryName,URI:repositoryUri}" --output table
 ```
 
 将查询结果写入 `newName`：
@@ -128,8 +128,8 @@ images:
 确认存在 `dev-latest` 和哈希值。运行前把仓库名替换为自己的值。
 
 ```bash
-aws ecr describe-images --repository-name "de-ai-25-devops-tf-eks-auto-dev/web" --image-ids imageTag=dev-latest --region ap-northeast-2 --query "imageDetails[0].imageTags" --output json
-aws ecr describe-images --repository-name "de-ai-25-devops-tf-eks-auto-dev/was" --image-ids imageTag=dev-latest --region ap-northeast-2 --query "imageDetails[0].imageTags" --output json
+aws ecr describe-images --repository-name "de-ai-12-devops-tf-eks-auto-dev/web" --image-ids imageTag=dev-latest --region us-east-1 --query "imageDetails[0].imageTags" --output json
+aws ecr describe-images --repository-name "de-ai-12-devops-tf-eks-auto-dev/was" --image-ids imageTag=dev-latest --region us-east-1 --query "imageDetails[0].imageTags" --output json
 ```
 
 预期同时看到 `dev-latest` 和类似 `d8b623986184` 的提交哈希标签。
@@ -160,7 +160,7 @@ aws eks update-kubeconfig --region us-east-1 --name de-ai-12-devops-tf-eks-auto-
 kubectl get namespaces
 ```
 
-应能看到 `de-ai-25`、`default`、`kube-system` 等 Namespace 处于 `Active` 状态。
+应能看到 `de-ai-12`、`default`、`kube-system` 等 Namespace 处于 `Active` 状态。
 
 # 安装 Argo CD
 
@@ -179,7 +179,7 @@ Argo CD 以 Pod 形式运行在 Kubernetes 集群中并负责 CD。Application �
 
 ```text
 NAME       SYNC STATUS   HEALTH STATUS
-de-ai-25   OutOfSync     Healthy
+de-ai-12   OutOfSync     Healthy
 ```
 
 如果显示 `Unknown`，可能需要增加认证步骤；私有仓库还需要配置访问凭据。
@@ -188,13 +188,13 @@ de-ai-25   OutOfSync     Healthy
 
 ```bash
 # 检查 Pod
-kubectl get pods -n de-ai-25
+kubectl get pods -n de-ai-12
 
 # 检查 Ingress 和 ALB 地址
-kubectl get ingress -n de-ai-25
+kubectl get ingress -n de-ai-12
 
 # 检查当前部署的镜像
-kubectl get deployment web was -n de-ai-25 -o jsonpath="{range .items[*]}{.metadata.name}{': '}{.spec.template.spec.containers[0].image}{'\n'}{end}"
+kubectl get deployment web was -n de-ai-12 -o jsonpath="{range .items[*]}{.metadata.name}{': '}{.spec.template.spec.containers[0].image}{'\n'}{end}"
 ```
 
 正常情况下 WEB/WAS Pod 均为 `Running`，Ingress 显示 ALB 地址，镜像标签当前为 `dev-latest`。
@@ -213,3 +213,26 @@ kubectl get deployment web was -n de-ai-25 -o jsonpath="{range .items[*]}{.metad
   ```bash
   gh auth token | gh secret set CD_REPOSITORY_TOKEN --repo ucoccto/devops_tf_k8s_ci
   ```
+
+# Argo CD 登录信息
+
+```text
+Argo CD 地址     : https://localhost:8080
+Argo CD 用户名   : admin
+Argo CD 密码     : 61Ety9W8Ev00hanX
+```
+
+# 访问网站
+
+```text
+kubectl describe ingress public-alb -n de-ai-12
+kubectl describe ingress public-alb -n de-ai-12
+---
+
+访问：http://k8s-deai12-publical-83d23986ad-330339377.us-east-1.elb.amazonaws.com/
+
+在 CI 仓库中 Push 开发代码 -> 稍等片刻后访问网站 -> 可以看到变更已经生效
+# Kubernetes 配置修改由 CD 负责
+# 基础设施修改由 CI 负责
+# 代码修改由 CI 负责
+```

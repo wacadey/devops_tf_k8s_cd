@@ -125,7 +125,7 @@ tf-k8s-cd/
   - newName 파트 수정 : 본인 ECR내 web/was 이미지 주소로 변경
   ```
     # 본인 리전 교체
-    aws ecr describe-repositories --region ap-northeast-2  --query "repositories[].{Name:repositoryName,URI:repositoryUri}"  --output table
+    aws ecr describe-repositories --region us-east-1  --query "repositories[].{Name:repositoryName,URI:repositoryUri}"  --output table
     ---
     ---------------------------------------------------------------------------------------------------------------------------------- 
     |                                                      DescribeRepositories                                                      |
@@ -150,14 +150,14 @@ tf-k8s-cd/
   ```
     # 태그 확인 - `dev-latest, 해시값 확인`
     # --repository-name 뒷값 본인것으로 수정후 테스트함
-    aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/web"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+    aws ecr describe-images  --repository-name "de-ai-12-devops-tf-eks-auto-dev/web"  --image-ids imageTag=dev-latest  --region us-east-1  --query "imageDetails[0].imageTags"  --output json
     ---
     [                                                                                                          
       "dev-latest",
       "d8b623986184"
     ] 
     
-    aws ecr describe-images  --repository-name "de-ai-25-devops-tf-eks-auto-dev/was"  --image-ids imageTag=dev-latest  --region ap-northeast-2  --query "imageDetails[0].imageTags"  --output json
+    aws ecr describe-images  --repository-name "de-ai-12-devops-tf-eks-auto-dev/was"  --image-ids imageTag=dev-latest  --region us-east-1  --query "imageDetails[0].imageTags"  --output json
     ---
     [                                                                                                          
       "d8b623986184",
@@ -194,19 +194,19 @@ tf-k8s-cd/
       +-------------------------------------+
       ||             clusters              ||
       |+-----------------------------------+|
-      ||  de-ai-25-devops-tf-eks-auto-dev  ||
+      ||  de-ai-12-devops-tf-eks-auto-dev  ||
       |+-----------------------------------+|
 
     # 연결 (클러스터명 교체)
     aws eks update-kubeconfig --region us-east-1 --name de-ai-12-devops-tf-eks-auto-dev
     ---
-    Updated context arn:aws:eks:ap-northeast-2:827913617635:cluster/de-ai-25-devops-tf-eks-auto-dev in C:\Users\Dell3571\.kube\config
+    Updated context arn:aws:eks:us-east-1:827913617635:cluster/de-ai-12-devops-tf-eks-auto-dev in C:\Users\Dell3571\.kube\config
 
     # kubectl이 실제 접근 가능한 클러스터 목록(가능한지)
     kubectl get namespaces
     ---
     NAME              STATUS   AGE
-    de-ai-25          Active   177m
+    de-ai-12          Active   177m
     default           Active   3h17m
     kube-node-lease   Active   3h17m
     kube-public       Active   3h17m
@@ -235,7 +235,7 @@ tf-k8s-cd/
   kubectl get applications -n argocd
   ---
   NAME       SYNC STATUS   HEALTH STATUS
-  de-ai-25   OutOfSync     Healthy <- unknown 이면 인증등 절차 추가됨(일단 public으로 진행)
+  de-ai-12   OutOfSync     Healthy <- unknown 이면 인증등 절차 추가됨(일단 public으로 진행)
   ---
   private인 경우 절차 추가로 문서로 제공
 ```
@@ -243,7 +243,7 @@ tf-k8s-cd/
 - 현재 상황 체크 
 ```
   # pod 상태 확인
-  kubectl get pods -n de-ai-25
+  kubectl get pods -n de-ai-12
   ---
   NAME                  READY   STATUS    RESTARTS   AGE
   was-5d6bfcfcf-4ljtq   1/1     Running   0          10m
@@ -252,16 +252,16 @@ tf-k8s-cd/
   web-575f6f465-nn4dg   1/1     Running   0          10m
 
   # Ingress, ALB 주소 체크
-  kubectl get ingress -n de-ai-25
+  kubectl get ingress -n de-ai-12
   ---
   NAME         CLASS   HOSTS   ADDRESS   PORTS   AGE
-public-alb   alb     *    k8s-deai25-publical-aa59f987ef-214105444.ap-northeast-2.elb.amazonaws.com   80      11m
+public-alb   alb     *    k8s-deai25-publical-aa59f987ef-214105444.us-east-1.elb.amazonaws.com   80      11m
 
   # 현재 클러스터에 배포된 이미지 확인
-  kubectl get deployment web was  -n de-ai-25  -o jsonpath="{range .items[*]}{.metadata.name}{': '}{.spec.template.spec.containers[0].image}{'\n'}{end}"
+  kubectl get deployment web was  -n de-ai-12  -o jsonpath="{range .items[*]}{.metadata.name}{': '}{.spec.template.spec.containers[0].image}{'\n'}{end}"
   ---
-  web: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-devops-tf-eks-auto-dev/web:dev-latest
-  was: 827913617635.dkr.ecr.ap-northeast-2.amazonaws.com/de-ai-25-devops-tf-eks-auto-dev/was:dev-latest
+  web: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/web:dev-latest
+  was: 827913617635.dkr.ecr.us-east-1.amazonaws.com/de-ai-12-devops-tf-eks-auto-dev/was:dev-latest
   --- 현재 태그명 dev-latest으로 배포되어 있다!!
 ```
 
@@ -281,3 +281,21 @@ public-alb   alb     *    k8s-deai25-publical-aa59f987ef-214105444.ap-northeast-
         SITORY_TOKEN --repo ucoccto/devops_tf_k8s_ci
         ✓ Set Actions secret CD_REPOSITORY_TOKEN for ucoccto/devops_tf_k8s_ci
       ```
+  ```
+  Argo CD URL      : https://localhost:8080
+  Argo CD Username : admin
+  Argo CD Password : 61Ety9W8Ev00hanX
+  ```
+
+# 사이트 접속 
+  ```
+    kubectl describe ingress public-alb -n de-ai-12
+    ---
+    
+    http://k8s-deai12-publical-83d23986ad-330339377.us-east-1.elb.amazonaws.com/ 접속
+
+    ci쪽에서 개발 push -> 잠시후 접속 -> 반영되어 있다
+    # 쿠버네티스 수정은 CD
+    # 인프라 수정은 CI
+    # 코드 수정 CI
+  ```

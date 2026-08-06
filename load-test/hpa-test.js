@@ -3,7 +3,7 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 // TARGET_URL은 실행 스크립트에서 환경변수로 전달한다.
-// 예: http://example-alb.ap-northeast-2.elb.amazonaws.com/api/cpu
+// 예: http://example-alb.us-east-1.elb.amazonaws.com/api/cpu
 const targetUrl = __ENV.TARGET_URL;
 
 // 환경변수가 없으면 잘못된 주소로 테스트하는 것을 방지하기 위해 즉시 실패시킨다.
